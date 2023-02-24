@@ -28,15 +28,7 @@ const renderProducto = (product) => {
         <div class="prendas-1-info"> 
            <h4>${name}</h4> 
            <p>$${precio}</p> 
-           <button 
-               class="btn-add"
-               data-id="${id}"
-               data-name="${name}"
-               data-precio="${precio}"
-               data-img="${cardImg}"
-            >
-                Agregar!
-           </button> 
+           <button class="btn-add" data-id="${id}" data-name="${name}" data-precio="${precio}" data-card-img="${cardImg}">Agregar!</button>
         </div> 
     </div>
     `;
@@ -172,17 +164,17 @@ const renderCardIndumentaria = (compraProd) => {
     const {id, name, precio, cardImg, quantity } = compraProd;
     return `
     <div class="cart-indum">
-            <img src="${cardImg}" alt="${name}" />
-            <div class="cart-indum1">
-              <h3 class="item-title">${name}</h3>
-              <span class="item-price">$${precio}</span>
-            </div>
-            <div class="item-handler">
-              <span class="quantity-handler down" data-id=${id}> - </span>
-              <span class="item-quantity"> ${quantity} </span>
-              <span class="quantity-handler up" data-id=${id}> + </span>
-            </div>
-          </div>
+       <img src="${cardImg}" alt="${name}" /> 
+       <div class="cart-indum1">
+            <h3 class="item-title">${name}</h3>
+            <span class="item-price">$${precio}</span>
+        </div>
+        <div class="item-handler">
+            <span class="quantity-handler down" data-id=${id}> - </span>
+            <span class="item-quantity"> ${quantity} </span>
+            <span class="quantity-handler up" data-id=${id}> + </span>
+        </div>
+    </div>
 
     
     `;
@@ -202,7 +194,7 @@ const totalProduct = () => {
         return acc + Number(cur.precio) * cur.quantity
     }, 0);
 };
-// showTotal:
+// mostrar el total del carrito:
 const mostrarTotal = () => {
     total.innerHTML = `$${totalProduct().toFixed(2)}`;
 };
@@ -212,7 +204,7 @@ const renderBubble = () => {
         return acc + cur.quantity;
     }, 0);
 };
-
+// desactivar boton de compra y vaciar carrito:
 const deshabBtn = (btn) => {
     if(!cart.length) {
         btn.classList.add("disabled");
@@ -243,7 +235,7 @@ const agregarProd = (e) => {
     const product = productData(id, name, precio, cardImg);
 
     if(carritoExistente(product)) {
-        agregarProd(product);
+        addUnit(product);
         modalSuccess("Se agregó una unidad con éxito");
 
     } else {
@@ -258,7 +250,7 @@ const agregarProd = (e) => {
 const productData = (id, name, precio, cardImg) => {
     return { id, name, precio, cardImg };
 };
-// productos en el carrito:
+// productos en el carrito:isExistingCartProduct
 const carritoExistente = (product) => {
     return cart.find((item) => {
         return item.id === product.id;
@@ -266,11 +258,11 @@ const carritoExistente = (product) => {
 };
 // // suma la cantidad de unidades de los productos:
 const addUnit = (product) => {
-    cart = cart.map((cartProduct) => {
-        return cartProduct.id === product.id
-        ? { ...cartProduct, quantity: cartProduct.quantity + 1
+    cart = cart.map((compraProd) => {
+        return compraProd.id === product.id
+        ? { ...compraProd, quantity: compraProd.quantity + 1
         }
-        : cartProduct;
+        : compraProd;
     });
 
 };
@@ -293,7 +285,7 @@ const insertProduct = (product) => {
         },
     ];
 };
-// boton de quitar producto (-) 
+// boton de quitar producto (-) existingCArtProduct?
 const btnLess = (id) => {
     const existingCartProduct = cart.find((item) => {
         return item.id === id
